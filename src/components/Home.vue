@@ -9,15 +9,15 @@
       :key="game.id"
       :src="game.imageSrc"
     >
-    
-        </v-carousel-item>
+    </v-carousel-item>
   </v-carousel>
             </v-flex>
         </v-layout>
     </v-container>
     <v-container grid-list-lg>
         <v-layout row wrap>
-            <v-flex xs12 sm6 md4 v-for="game in ads" :key="game.id">
+            <v-flex xs12 sm6 md4 v-for="game in ads"
+            :key="game.id">
                 <v-card>
         <v-card-media
           :src="game.imageSrc"
@@ -44,8 +44,7 @@ export default {
       ads: [
         {
           title: "Grand Theft Auto VI",
-          description:
-            "...You are what hipsters aspire to be. You, Trevor, are the proto-hipster",
+          description: "You, Trevor, are the proto-hipster",
           imageSrc: `https://ps4n.ru/wp-content/uploads/2017/07/GTA-6.jpg`,
           id: "1"
         },

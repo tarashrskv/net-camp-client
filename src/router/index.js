@@ -2,7 +2,7 @@ import Vue from "vue";
 import guard from "./guard";
 import Router from "vue-router";
 import Home from "@/components/Home.vue";
-import Game from "@/components/Game.vue";
+import GameWrapper from "@/components/GameWrapper.vue";
 import Login from "@/components/Login.vue";
 import About from "@/components/About.vue";
 import Registration from "@/components/Registration.vue";
@@ -41,7 +41,7 @@ export default new Router({
     {
       path: "/games/:id",
       name: "game",
-      component: Game,
+      component: GameWrapper,
       beforeEnter: guard
     }
   ],
