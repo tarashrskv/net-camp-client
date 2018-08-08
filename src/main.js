@@ -13,7 +13,9 @@ import {
   faSignOutAlt,
   faGamepad,
   faTrophy,
-  faUsers
+  faUsers,
+  faGrimace,
+  faCameraRetro
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -24,7 +26,8 @@ library.add(
   faSignOutAlt,
   faGamepad,
   faTrophy,
-  faUsers
+  faUsers,
+  faCameraRetro
 );
 
 Vue.component("fa", FontAwesomeIcon);

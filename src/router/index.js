@@ -2,9 +2,11 @@ import Vue from "vue";
 import guard from "./guard";
 import Router from "vue-router";
 import Home from "@/components/Home.vue";
+import MyScores from "@/components/MyScores.vue";
 import GameWrapper from "@/components/GameWrapper.vue";
 import Login from "@/components/Login.vue";
 import About from "@/components/About.vue";
+import AllScores from "@/components/AllScores.vue";
 import Registration from "@/components/Registration.vue";
 import GamesList from "@/components/GamesList.vue";
 
@@ -42,6 +44,18 @@ export default new Router({
       path: "/games/:id",
       name: "game",
       component: GameWrapper,
+      beforeEnter: guard
+    },
+    {
+      path: "/games/:id/allScores",
+      name: "allScores",
+      component: AllScores,
+      beforeEnter: guard
+    },
+    {
+      path: "/games/:id/myScores",
+      name: "myScores",
+      component: MyScores,
       beforeEnter: guard
     }
   ],

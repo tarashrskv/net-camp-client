@@ -8,6 +8,7 @@
               </v-toolbar>
               <v-card-text>
                 <v-form
+                enctype="multipart/form-data"
                 v-model="valid"
                 ref="form"
                 lazy-validation>
@@ -36,11 +37,22 @@
                    type="password"
                    :rules="confirmPasswordRules">
                    </v-text-field>
+                   <v-layout row class="mb-3">
+                     <v-flex xs12>
+                   <v-btn @click="showUpload" class="success"><fa pull="left" icon="camera-retro"/>Set avatar</v-btn>
+                   <input ref="avatarInput" type="file" style="display: none;" accept="image/*" @change="onFileChange">
+                     </v-flex>
+                   </v-layout>
+                   <v-layout row>
+                     <v-flex xs12>
+                   <img :src="imageSrc" height="150" v-if="imageSrc">
+                     </v-flex>
+                   </v-layout>
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn @click="submit" color="primary" :loading="loading" :disabled="!valid || loading">Register</v-btn>
+                <v-btn @click="submit" color="primary" :loading="loading" :disabled="(!valid && !avatar) || loading">Register</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -56,8 +68,10 @@ export default {
     return {
       login: "",
       password: "",
+      avatar: null,
       confirmPassword: "",
       valid: false,
+      imageSrc: "",
       loginRules: [
         v => !!v || "Login is required",
         v =>
@@ -86,16 +100,36 @@ export default {
   },
   methods: {
     submit() {
-      if (this.$refs.form.validate()) {
-        const user = {
-          login: this.login,
-          password: this.password
-        };
+      if (this.$refs.form.validate() && this.avatar) {
+        // const user = {
+        //   login: this.login,
+        //   password: this.password,
+        //   avatar: this.avatar
+        // };
+
+        const formData = new FormData();
+        formData.append("login", this.login);
+        formData.append("password", this.password);
+        formData.append("avatar", this.avatar);
+        
         this.$store
-          .dispatch("registerUser", user)
+          .dispatch("registerUser", formData)
           .then(() => this.$router.push("/login"))
           .catch(err => console.error(err));
       }
+    },
+    showUpload() {
+      this.$refs.avatarInput.click();
+    },
+    onFileChange(event) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.imageSrc = reader.result;
+      }
+      reader.readAsDataURL(file);
+      this.avatar = file;
     }
   }
 };

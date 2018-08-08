@@ -14,13 +14,13 @@ export default {
     }
   },
   actions: {
-    registerUser({ commit }, { login, password }) {
+    registerUser({ commit }, formData) {
       commit("clearError");
       commit("setLoading", true);
       return new Promise((resolve, reject) => {
         axios({
           url: "https://localhost:44363/api/User/rgstr",
-          data: { login, password },
+          data: formData,
           method: "POST"
         })
           .then(resp => {
@@ -62,7 +62,7 @@ export default {
             commit("setLoading", false);
             localStorage.setItem("token", token);
             commit("setToken", token);
-            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; // may be a problem with "bearer" argument
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             resolve(resp);
           })
           .catch(err => {

@@ -3,7 +3,7 @@
         <v-layout row>
             <v-flex xs12>
                 <v-card>
-                    <v-card-media :src="gameEntity.imageSrc" height="550px"></v-card-media>
+                    <v-card-media :src="gameEntity.imageSrc" height="450px"></v-card-media>
                     <v-card-title>
                         <h1 class="text--primary">{{gameEntity.title}}</h1>
                     </v-card-title>
@@ -12,8 +12,8 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn flat class="accent">All scores</v-btn>
-                        <v-btn class="success">My scores</v-btn>
+                        <v-btn flat class="accent" :to="'/games/' + gameId() + '/allScores'">All scores</v-btn>
+                        <v-btn flat class="success" :to="'/games/' + gameId() + '/myScores'">My scores</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -30,7 +30,7 @@ import game1 from "../games/game1.js";
 export default {
   data() {
     return {
-      gameEntity: {},
+      gameEntity: {}
     };
   },
   components: {

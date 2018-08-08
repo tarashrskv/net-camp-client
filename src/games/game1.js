@@ -2,13 +2,29 @@ import axios from "axios";
 import store from "../store/index.js";
 
 var myGamePiece;
+var myBackground;
 var myObstacles = [];
 var myScore;
 
 function startGame() {
-  myGamePiece = new component(30, 30, "#1976D2", 10, 120);
+  myGamePiece = new component(
+    75,
+    75,
+    "../../static/doge.png",
+    10,
+    120,
+    "image"
+  );
   myGamePiece.gravity = 0.05;
-  myScore = new component("30px", "Consolas", "black", 280, 40, "text");
+  myScore = new component("30px", "Consolas", "#C51162", 280, 40, "text");
+  myBackground = new component(
+    1920,
+    450,
+    "../../static/memes.jpg",
+    0,
+    0,
+    "background"
+  );
   myObstacles = [];
   myGameArea.start();
 }
@@ -26,7 +42,7 @@ var myGameArea = {
       this.stop();
     }
     this.canvas.width = 1920;
-    this.canvas.height = 270;
+    this.canvas.height = 450;
     this.canvas.style.backgroundColor = "#fafafa";
     this.context = this.canvas.getContext("2d");
 
@@ -57,6 +73,10 @@ var myGameArea = {
 
 function component(width, height, color, x, y, type) {
   this.type = type;
+  if (type == "image" || type == "background") {
+    this.image = new Image();
+    this.image.src = color;
+  }
   this.score = 0;
   this.width = width;
   this.height = height;
@@ -68,7 +88,13 @@ function component(width, height, color, x, y, type) {
   this.gravitySpeed = 0;
   this.update = function() {
     let ctx = myGameArea.context;
-    if (this.type == "text") {
+    if (type == "image" || type == "background") {
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+      if (type == "background") {
+        ctx.drawImage(this.image, 
+        this.x + this.width, this.y, this.width, this.height);
+    }
+    } else if (this.type == "text") {
       ctx.font = this.width + " " + this.height;
       ctx.fillStyle = color;
       ctx.fillText(this.text, this.x, this.y);
@@ -81,6 +107,11 @@ function component(width, height, color, x, y, type) {
     this.gravitySpeed += this.gravity;
     this.x += this.speedX;
     this.y += this.speedY + this.gravitySpeed;
+    if (this.type == "background") {
+      if (this.x == -(this.width)) {
+          this.x = 0;
+      }
+  }
     this.hitBottom();
     this.hitTop();
   };
@@ -145,6 +176,9 @@ function updateGameArea() {
     }
   }
   myGameArea.clear();
+  myBackground.speedX = -1;
+  myBackground.newPos();
+  myBackground.update();
   myGameArea.frameNo += 1;
   if (myGameArea.frameNo == 1 || everyinterval(150)) {
     x = myGameArea.canvas.width / 2.5;
@@ -153,12 +187,12 @@ function updateGameArea() {
     height = Math.floor(
       Math.random() * (maxHeight - minHeight + 1) + minHeight
     );
-    minGap = 50;
+    minGap = 85;
     maxGap = 200;
     gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
-    myObstacles.push(new component(10, height, "green", x, 0));
+    myObstacles.push(new component(20, height, "#009688", x, 0));
     myObstacles.push(
-      new component(10, x - height - gap, "green", x, height + gap)
+      new component(25, x - height - gap, "#009688", x, height + gap)
     );
   }
   for (let i = 0; i < myObstacles.length; i += 1) {
