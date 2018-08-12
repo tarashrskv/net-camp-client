@@ -14,6 +14,7 @@
                         <v-spacer></v-spacer>
                         <v-btn flat class="accent" :to="'/games/' + gameId() + '/allScores'">All scores</v-btn>
                         <v-btn flat class="success" :to="'/games/' + gameId() + '/myScores'">My scores</v-btn>
+                        <v-btn v-if="this.$store.getters.isUserAdmin" flat class="secondary" :to="'/games/' + gameId() + '/rating'"><fa pull="left" icon="trophy"/>Rating</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -25,7 +26,6 @@
 <script>
 import Game from "@/components/Game.vue";
 import axios from "axios";
-import game1 from "../games/game1.js";
 
 export default {
   data() {
@@ -38,7 +38,7 @@ export default {
   },
   created() {
     axios({
-      url: `https://localhost:44363/api/Game/${this.gameId()}`,
+      url: `https://localhost:44363/api/Games/${this.gameId()}`,
       method: "GET"
     })
       .then(resp => (this.gameEntity = resp.data))

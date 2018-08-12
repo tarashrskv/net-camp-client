@@ -19,7 +19,7 @@ export default {
       commit("setLoading", true);
       return new Promise((resolve, reject) => {
         axios({
-          url: "https://localhost:44363/api/User/rgstr",
+          url: "https://localhost:44363/api/Users",
           data: formData,
           method: "POST"
         })

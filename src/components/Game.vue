@@ -8,11 +8,12 @@
 
 <script>
 import game1 from "../games/game1.js";
+import game2 from "../games/game2.js";
 
 export default {
   data() {
     return {
-      game: {}
+      game: null
     };
   },
   created() {
@@ -23,6 +24,9 @@ export default {
       switch (this.$route.params.id) {
         case "1":
           return game1;
+          break;
+        case "2":
+          return game2;
           break;
       }
     },

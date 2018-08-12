@@ -14,7 +14,6 @@ import {
   faGamepad,
   faTrophy,
   faUsers,
-  faGrimace,
   faCameraRetro
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

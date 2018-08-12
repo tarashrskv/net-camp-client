@@ -43,7 +43,7 @@ export default {
     };
   },
   created() {
-    axios({ url: `https://localhost:44363/api/Game/all`, method: "GET" })
+    axios({ url: `https://localhost:44363/api/Games`, method: "GET" })
       .then(resp => (this.games = resp.data))
       .catch(err => console.error(err));
   }

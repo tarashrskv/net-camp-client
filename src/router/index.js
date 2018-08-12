@@ -1,5 +1,6 @@
 import Vue from "vue";
 import guard from "./guard";
+import adminsOnly from "./adminsOnly"
 import Router from "vue-router";
 import Home from "@/components/Home.vue";
 import MyScores from "@/components/MyScores.vue";
@@ -9,6 +10,7 @@ import About from "@/components/About.vue";
 import AllScores from "@/components/AllScores.vue";
 import Registration from "@/components/Registration.vue";
 import GamesList from "@/components/GamesList.vue";
+import Rating from "@/components/Rating.vue"
 
 Vue.use(Router);
 
@@ -57,6 +59,12 @@ export default new Router({
       name: "myScores",
       component: MyScores,
       beforeEnter: guard
+    },
+    {
+      path: "/games/:id/rating",
+      name: "rating",
+      component: Rating,
+      beforeEnter: adminsOnly
     }
   ],
   mode: "history"

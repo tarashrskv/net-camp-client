@@ -8,9 +8,9 @@ var myScore;
 
 function startGame() {
   myGamePiece = new component(
-    75,
-    75,
-    "../../static/doge.png",
+    100,
+    36,
+    "../../static/delorean.png",
     10,
     120,
     "image"
@@ -20,7 +20,7 @@ function startGame() {
   myBackground = new component(
     1920,
     450,
-    "../../static/memes.jpg",
+    "../../static/road.png",
     0,
     0,
     "background"
@@ -53,11 +53,21 @@ var myGameArea = {
     this.frameNo = 0;
     this.interval = null;
     this.interval = setInterval(updateGameArea, 20);
-    window.addEventListener("mousedown", e => {
-      accelerate(-0.25);
+    window.addEventListener("keydown", e => {
+      if (e.keyCode === 87) {
+        accelerate(-3);
+      }
+      if (e.keyCode === 83) {
+        accelerate(3);
+      }
     });
-    window.addEventListener("mouseup", e => {
-      accelerate(0.15);
+    window.addEventListener("keyup", e => {
+      if (e.keyCode === 87) {
+        stopMove();
+      }
+      if (e.keyCode === 83) {
+        stopMove();
+      }
     });
   },
   clear: function() {
@@ -84,16 +94,19 @@ function component(width, height, color, x, y, type) {
   this.speedY = 0;
   this.x = x;
   this.y = y;
-  this.gravity = 0;
-  this.gravitySpeed = 0;
   this.update = function() {
     let ctx = myGameArea.context;
     if (type == "image" || type == "background") {
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
       if (type == "background") {
-        ctx.drawImage(this.image, 
-        this.x + this.width, this.y, this.width, this.height);
-    }
+        ctx.drawImage(
+          this.image,
+          this.x + this.width,
+          this.y,
+          this.width,
+          this.height
+        );
+      }
     } else if (this.type == "text") {
       ctx.font = this.width + " " + this.height;
       ctx.fillStyle = color;
@@ -104,14 +117,13 @@ function component(width, height, color, x, y, type) {
     }
   };
   this.newPos = function() {
-    this.gravitySpeed += this.gravity;
     this.x += this.speedX;
-    this.y += this.speedY + this.gravitySpeed;
+    this.y += this.speedY;
     if (this.type == "background") {
-      if (this.x == -(this.width)) {
-          this.x = 0;
+      if (this.x == -this.width) {
+        this.x = 0;
       }
-  }
+    }
     this.hitBottom();
     this.hitTop();
   };
@@ -119,13 +131,11 @@ function component(width, height, color, x, y, type) {
     var rockbottom = myGameArea.canvas.height - this.height;
     if (this.y > rockbottom) {
       this.y = rockbottom;
-      this.gravitySpeed = 0;
     }
     this.hitTop = function() {
       var rockTop = 0;
       if (this.y < rockTop) {
         this.y = rockTop;
-        this.gravitySpeed = 0;
       }
     };
   };
@@ -154,7 +164,7 @@ function component(width, height, color, x, y, type) {
 function sendScoreToServer() {
   const requestBody = {
     userId: store.getters.user.id,
-    gameId: 1,
+    gameId: 2,
     score: myGameArea.frameNo
   };
   axios({
@@ -190,9 +200,9 @@ function updateGameArea() {
     minGap = 90;
     maxGap = 200;
     gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
-    myObstacles.push(new component(25, height, "#009688", x, 0));
+    myObstacles.push(new component(20, height, "#BF360C", x, 0));
     myObstacles.push(
-      new component(25, x - height - gap, "#009688", x, height + gap)
+      new component(20, x - height - gap, "#BF360C", x, height + gap)
     );
   }
   for (let i = 0; i < myObstacles.length; i += 1) {
@@ -213,13 +223,18 @@ function everyinterval(n) {
 }
 
 function accelerate(n) {
-  myGamePiece.gravity = n;
+  myGamePiece.speedY = n;
 }
 
 function closeGame() {
   myGameArea.stop();
   myGameArea.clear();
   myGameArea.close();
+}
+
+function stopMove() {
+  myGamePiece.speedX = 0;
+  myGamePiece.speedY = 0;
 }
 
 export default {
